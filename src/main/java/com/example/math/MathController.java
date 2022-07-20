@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/mathservice")
-/**
- * Package service controller.
- */
 public class MathController {
     private static Logger log = LoggerFactory.getLogger(MathController.class);
     @GetMapping(value = "/")
