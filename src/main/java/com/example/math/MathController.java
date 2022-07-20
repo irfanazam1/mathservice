@@ -28,4 +28,10 @@ public class MathController {
         log.info(">>>> subtract");
         return ResponseEntity.ok(payload.Var1 - payload.Var2);
     }
+
+    @PostMapping(value = "/multiply", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<Integer> multiply(@RequestBody Payload payload){
+        log.info(">>>> subtract");
+        return ResponseEntity.ok(payload.Var1 * payload.Var2);
+    }
 }
