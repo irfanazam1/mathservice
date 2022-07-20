@@ -1,3 +1,5 @@
 FROM openjdk:17-alpine
 MAINTAINER irfanazam1@github.com
-CMD ["java","-jar","/home/mathservice.jar"]
+ARG JAR_FILE=/home/runner/work/mathservice/mathservice/target/*.jar
+COPY ${JAR_FILE} mathservice-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","/mathservice-0.0.1-SNAPSHOT.jar"]

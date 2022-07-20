@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example.service</groupId>
-	<artifactId>math</artifactId>
+	<artifactId>mathservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>math-service</name>
 	<description>Demo project for Spring Boot</description>
