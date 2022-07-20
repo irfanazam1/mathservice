@@ -3,6 +3,7 @@ package com.example.math;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +17,15 @@ public class MathController {
         return ResponseEntity.ok("Hello from Math Service!");
     }
 
-    @PostMapping(value = "/add")
-    public HttpEntity<Result> add(@RequestBody Payload payload){
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<Integer> add(@RequestBody Payload payload){
         log.info(">>>> add");
-        Result result = new Result(payload.Var1 + payload.Var2);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(payload.Var1 + payload.Var2);
     }
 
-    @PostMapping(value = "/subtract")
-    public HttpEntity<Result> subtract(@RequestBody Payload payload){
+    @PostMapping(value = "/subtract", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<Integer> subtract(@RequestBody Payload payload){
         log.info(">>>> subtract");
-        Result result = new Result(payload.Var1 - payload.Var2);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(payload.Var1 - payload.Var2);
     }
 }

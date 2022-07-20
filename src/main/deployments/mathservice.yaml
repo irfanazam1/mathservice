@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mathservice
-          image: irfanazam1/mathservice:5ce06c2
+          image: irfanazam1/mathservice:be90e44
           ports:
             - containerPort: 8080
       hostNetwork: true

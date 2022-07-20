@@ -1,6 +1,6 @@
 package com.example.math;
 
 public class Payload {
-    public Double Var1;
-    public Double Var2;
+    public Integer Var1;
+    public Integer Var2;
 }
