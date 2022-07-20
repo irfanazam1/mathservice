@@ -1,4 +1,5 @@
 FROM openjdk:17-alpine
 MAINTAINER irfanazam1@github.com
 USER root
+COPY /home/runner/work/mathservice/mathservice/target/*.jar /mathservice.jar
 ENTRYPOINT ["java","-jar","/mathservice.jar"]

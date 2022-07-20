@@ -19,9 +19,6 @@ jobs:
       - name: Java Maven Build
         run: mvn package clean package
 
-      - name: Copy Jar Output
-        run:  sudo cp /home/runner/work/mathservice/mathservice/target/*.jar mathservice.jar
-
       - name: Image Version
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
