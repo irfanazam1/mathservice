@@ -1,3 +1,4 @@
 FROM openjdk:17-alpine
 MAINTAINER irfanazam1@github.com
-CMD ["java","-jar","/mathservice.jar"]
+USER root
+ENTRYPOINT ["java","-jar","/mathservice.jar"]
