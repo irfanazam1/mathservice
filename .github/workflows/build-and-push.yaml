@@ -20,7 +20,7 @@ jobs:
         run: mvn package clean package
 
       - name: Copy Jar Output
-        run:  sudo cp /home/runner/work/mathservice/mathservice/target/*.jar /home/mathservice.jar
+        run:  sudo cp /home/runner/work/mathservice/mathservice/target/*.jar mathservice.jar
 
       - name: Image Version
         id: vars
