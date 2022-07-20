@@ -29,5 +29,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: irfanazam1/mathservice:latest
+          tags: irfanazam1/mathservice:${{ steps.vars.outputs.sha_short }}
           file: Dockerfile.github
