@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demoservice-deployment
+  labels:
+     app: demoservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demoservice
+  template:
+    metadata:
+      labels:
+        app: demoservice
+    spec:
+      containers:
+        - name: demoservice
+          image: irfanazam1/demoservice:ce80643
+          ports:
+            - containerPort: 8080
+      hostNetwork: true
+      dnsPolicy: Default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demoservice
+  labels:
+    app: demoservice
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: demoservice
+  type: LoadBalancer

@@ -1,0 +1,3 @@
+FROM openjdk:17-alpine
+MAINTAINER irfanazam1@github.com
+CMD ["java","-jar","/home/mathservice.jar"]
