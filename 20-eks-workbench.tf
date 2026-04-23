@@ -7,9 +7,14 @@
 #   - Essential addons: coredns, kube-proxy, vpc-cni, eks-pod-identity-agent
 #   - General node group active; GPU/Inferentia/NVMe/HighMem commented out
 #
+# CRITICAL FIX APPLIED (April 2026):
+#   - Added iam_role_additional_policies to ALL node groups
+#   - Fixes "CNI plugin not initialized" error preventing nodes from joining
+#   - Required policies: AmazonEKS_CNI_Policy, AmazonEKSWorkerNodePolicy, etc.
+#
 # BEFORE APPLYING:
 #   1. Replace vpc_id = "vpc-XXXXX" with your actual VPC ID:
-#      aws ec2 describe-subnets --subnet-ids subnet-044cd019aa6cad905 \
+#      aws ec2 describe-subnets --subnet-044cd019aa6cad905 \
 #        --query 'Subnets[0].VpcId' --output text
 #   2. Ensure SSH key pair "Vectara-App-QC" exists in the target region
 #   3. Verify security groups sg-030810e99b2ffc1f0 and sg-0de83503181c59936 exist
@@ -135,8 +140,16 @@ module "eks_workbench" {
     general = {
       name = "vectara-ng-general-workbench"
 
-      iam_role_name            = "vectara-ng-general-wb"   
+      iam_role_name            = "vectara-ng-general-wb"
       iam_role_use_name_prefix = true
+
+      # IAM policies required for VPC CNI and core node functionality
+      iam_role_additional_policies = {
+        AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+        AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+        AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      }
 
       # IMDSv2 with hop limit 2 — required for VPC CNI to reach IMDS from container context
       # hop limit 1 (default) breaks CNI initialisation on EKS nodes
@@ -178,6 +191,22 @@ module "eks_workbench" {
     # -------------------------------------------------------------------------
     # gpu_fcs = {
     #   name = "vectara-ng-gpu-fcs-workbench"
+    #
+    #   iam_role_name            = "vectara-ng-gpu-fcs-wb"
+    #   iam_role_use_name_prefix = true
+    #
+    #   iam_role_additional_policies = {
+    #     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    #     AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    #     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    #     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    #   }
+    #
+    #   metadata_options = {
+    #     http_endpoint               = "enabled"
+    #     http_tokens                 = "required"
+    #     http_put_response_hop_limit = 2
+    #   }
     #
     #   desired_size = 0
     #   min_size     = 0
@@ -221,6 +250,22 @@ module "eks_workbench" {
     # gpu_ml = {
     #   name = "vectara-ng-gpu-ml-workbench"
     #
+    #   iam_role_name            = "vectara-ng-gpu-ml-wb"
+    #   iam_role_use_name_prefix = true
+    #
+    #   iam_role_additional_policies = {
+    #     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    #     AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    #     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    #     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    #   }
+    #
+    #   metadata_options = {
+    #     http_endpoint               = "enabled"
+    #     http_tokens                 = "required"
+    #     http_put_response_hop_limit = 2
+    #   }
+    #
     #   desired_size = 1
     #   min_size     = 1
     #   max_size     = 2
@@ -262,6 +307,22 @@ module "eks_workbench" {
     # -------------------------------------------------------------------------
     # inferentia = {
     #   name = "vectara-ng-inferentia-workbench"
+    #
+    #   iam_role_name            = "vectara-ng-inferentia-wb"
+    #   iam_role_use_name_prefix = true
+    #
+    #   iam_role_additional_policies = {
+    #     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    #     AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    #     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    #     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    #   }
+    #
+    #   metadata_options = {
+    #     http_endpoint               = "enabled"
+    #     http_tokens                 = "required"
+    #     http_put_response_hop_limit = 2
+    #   }
     #
     #   desired_size = 1
     #   min_size     = 1
@@ -305,6 +366,22 @@ module "eks_workbench" {
     # nvme = {
     #   name = "vectara-ng-nvme-workbench"
     #
+    #   iam_role_name            = "vectara-ng-nvme-wb"
+    #   iam_role_use_name_prefix = true
+    #
+    #   iam_role_additional_policies = {
+    #     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    #     AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    #     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    #     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    #   }
+    #
+    #   metadata_options = {
+    #     http_endpoint               = "enabled"
+    #     http_tokens                 = "required"
+    #     http_put_response_hop_limit = 2
+    #   }
+    #
     #   desired_size = 1
     #   min_size     = 1
     #   max_size     = 2
@@ -346,6 +423,22 @@ module "eks_workbench" {
     # -------------------------------------------------------------------------
     # highmem = {
     #   name = "vectara-ng-highmem-workbench"
+    #
+    #   iam_role_name            = "vectara-ng-highmem-wb"
+    #   iam_role_use_name_prefix = true
+    #
+    #   iam_role_additional_policies = {
+    #     AmazonEKSWorkerNodePolicy          = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+    #     AmazonEKS_CNI_Policy               = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+    #     AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+    #     AmazonSSMManagedInstanceCore       = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    #   }
+    #
+    #   metadata_options = {
+    #     http_endpoint               = "enabled"
+    #     http_tokens                 = "required"
+    #     http_put_response_hop_limit = 2
+    #   }
     #
     #   desired_size = 1
     #   min_size     = 1
